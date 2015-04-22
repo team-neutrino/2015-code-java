@@ -6,15 +6,13 @@ import org.usfirst.frc.team3928.robot.subsystems.Lift;
 import org.usfirst.frc.team3928.robot.subsystems.Lights;
 import org.usfirst.frc.team3928.robot.subsystems.RCGrabber;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot
 {
-	private Compressor compInst;
 	private Joystick joyRight;
 	private Joystick joyLeft;
 	private Joystick gamepad;
@@ -30,7 +28,6 @@ public class Robot extends SampleRobot
 	 */
 	public Robot()
 	{
-		compInst = new Compressor();
 		joyRight = new Joystick(Constants.JOY_RIGHT_PORT.getInt());
 		joyLeft = new Joystick(Constants.JOY_LEFT_PORT.getInt());
 		gamepad = new Joystick(Constants.GAMEPAD_PORT.getInt());
@@ -48,7 +45,6 @@ public class Robot extends SampleRobot
 	@Override
 	public void robotInit()
 	{
-		compInst.start();
 		lightsInst.set(true);
 	}
 

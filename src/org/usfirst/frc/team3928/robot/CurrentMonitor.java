@@ -1,10 +1,12 @@
 package org.usfirst.frc.team3928.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CurrentMonitor implements Runnable
 {
+	private Compressor comp;
 	private PowerDistributionPanel pdp;
 	private Thread thread;
 
@@ -16,13 +18,15 @@ public class CurrentMonitor implements Runnable
 	{
 		pdpAttached = Constants.PDP_ATTACHED.getBoolean();
 
+		comp = new Compressor();
+
 		if (pdpAttached)
 		{
 			pdp = new PowerDistributionPanel();
-
-			thread = new Thread(this);
-			thread.start();
 		}
+
+		thread = new Thread(this);
+		thread.start();
 	}
 
 	public boolean warning()
@@ -33,52 +37,67 @@ public class CurrentMonitor implements Runnable
 	@Override
 	public void run()
 	{
-		while (pdpAttached)
+		while (true)
 		{
-			// Total Current
-			SmartDashboard.putBoolean("Warning",
-					WARGING_CURRENT <= pdp.getTotalCurrent());
-			SmartDashboard.putNumber("Total Current", pdp.getTotalCurrent());
+			if (pdpAttached)
+			{
+				// Total Current
+				SmartDashboard.putBoolean("Warning",
+						WARGING_CURRENT <= pdp.getTotalCurrent());
+				SmartDashboard
+						.putNumber("Total Current", pdp.getTotalCurrent());
 
-			// Drive
-			double driveLeft1Current = pdp
-					.getCurrent(Constants.DRIVE_LEFT_1_POWER_CHANNEL.getInt());
-			double driveLeft2Current = pdp
-					.getCurrent(Constants.DRIVE_LEFT_2_POWER_CHANNEL.getInt());
-			double driveRight1Current = pdp
-					.getCurrent(Constants.DRIVE_RIGHT_1_POWER_CHANNEL.getInt());
-			double driveRight2Current = pdp
-					.getCurrent(Constants.DRIVE_RIGHT_2_POWER_CHANNEL.getInt());
+				// Drive
+				double driveLeft1Current = pdp
+						.getCurrent(Constants.DRIVE_LEFT_1_POWER_CHANNEL
+								.getInt());
+				double driveLeft2Current = pdp
+						.getCurrent(Constants.DRIVE_LEFT_2_POWER_CHANNEL
+								.getInt());
+				double driveRight1Current = pdp
+						.getCurrent(Constants.DRIVE_RIGHT_1_POWER_CHANNEL
+								.getInt());
+				double driveRight2Current = pdp
+						.getCurrent(Constants.DRIVE_RIGHT_2_POWER_CHANNEL
+								.getInt());
 
-			SmartDashboard.putNumber("Total Drive Current", driveLeft1Current
-					+ driveLeft2Current + driveRight1Current
-					+ driveRight2Current);
-			SmartDashboard.putNumber("Drive Left 1 Current", driveLeft1Current);
-			SmartDashboard.putNumber("Drive Left 2 Current", driveLeft2Current);
-			SmartDashboard.putNumber("Drive Right 1 Current",
-					driveRight1Current);
-			SmartDashboard.putNumber("Drive Right 2 Current",
-					driveRight2Current);
+				SmartDashboard.putNumber("Total Drive Current",
+						driveLeft1Current + driveLeft2Current
+								+ driveRight1Current + driveRight2Current);
+				SmartDashboard.putNumber("Drive Left 1 Current",
+						driveLeft1Current);
+				SmartDashboard.putNumber("Drive Left 2 Current",
+						driveLeft2Current);
+				SmartDashboard.putNumber("Drive Right 1 Current",
+						driveRight1Current);
+				SmartDashboard.putNumber("Drive Right 2 Current",
+						driveRight2Current);
 
-			// Lift
-			SmartDashboard
-					.putNumber("Total Lift Current", pdp
-							.getCurrent(Constants.LIFT_MOTOR_POWER_CHANNEL
-									.getInt()));
+				// Lift
+				SmartDashboard.putNumber("Total Lift Current",
+						pdp.getCurrent(Constants.LIFT_MOTOR_POWER_CHANNEL
+								.getInt()));
 
-			// Intake
-			double intakeLeftCurrent = pdp
-					.getCurrent(Constants.INTAKE_MOTOR_LEFT_POWER_CHANNEL
-							.getInt());
-			double intakeRightCurrent = pdp
-					.getCurrent(Constants.INTAKE_MOTOR_RIGHT_POWER_CHANNEL
-							.getInt());
+				// Intake
+				double intakeLeftCurrent = pdp
+						.getCurrent(Constants.INTAKE_MOTOR_LEFT_POWER_CHANNEL
+								.getInt());
+				double intakeRightCurrent = pdp
+						.getCurrent(Constants.INTAKE_MOTOR_RIGHT_POWER_CHANNEL
+								.getInt());
 
-			SmartDashboard.putNumber("Total Sucky Current", intakeLeftCurrent
-					+ intakeRightCurrent);
-			SmartDashboard.putNumber("Sucky Left Current", intakeLeftCurrent);
-			SmartDashboard.putNumber("Sucky Right Current", intakeRightCurrent);
-			
+				SmartDashboard.putNumber("Total Sucky Current",
+						intakeLeftCurrent + intakeRightCurrent);
+				SmartDashboard.putNumber("Sucky Left Current",
+						intakeLeftCurrent);
+				SmartDashboard.putNumber("Sucky Right Current",
+						intakeRightCurrent);
+			}
+
+			// Compressor
+			SmartDashboard.putNumber("Compressor Current",
+					comp.getCompressorCurrent());
+
 			Thread.yield();
 		}
 	}
