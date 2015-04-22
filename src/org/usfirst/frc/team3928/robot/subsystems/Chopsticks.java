@@ -9,7 +9,7 @@ public class Chopsticks
 	private Solenoid solenoidOpen;
 	private Solenoid solenoidClose;
 	
-	private Chopsticks()
+	Chopsticks()
 	{
 		solenoidOpen = new Solenoid(Constants.CHOPSTICKS_SOLENOID_OPEN.getInt());
 		solenoidClose = new Solenoid(Constants.CHOPSTICKS_SOLENOID_CLOSE.getInt());

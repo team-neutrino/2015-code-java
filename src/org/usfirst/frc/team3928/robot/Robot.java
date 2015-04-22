@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3928.robot;
 
-import org.usfirst.frc.team3928.robot.subsystems.Chopsticks;
 import org.usfirst.frc.team3928.robot.subsystems.Drive;
 import org.usfirst.frc.team3928.robot.subsystems.Intake;
 import org.usfirst.frc.team3928.robot.subsystems.Lift;
@@ -18,18 +17,25 @@ public class Robot extends SampleRobot
 	private Joystick joyLeft;
 	private Joystick gamepad;
 	private Drive driveInst;
-	private Chopsticks chopsticksInst;
-	private RCGrabber rcGrabberInst;
-	private Lights lightsInst;
 	private Lift liftInst;
 	private Intake intakeInst;
-	
+	private RCGrabber rcGrabberInst;
+	private Lights lightsInst;
+
 	/**
 	 * Constructor
 	 */
 	public Robot()
 	{
-		
+		compInst = new Compressor();
+		joyRight = new Joystick(Constants.JOY_RIGHT_PORT.getInt());
+		joyLeft = new Joystick(Constants.JOY_LEFT_PORT.getInt());
+		gamepad = new Joystick(Constants.GAMEPAD_PORT.getInt());
+		driveInst = new Drive();
+		liftInst = new Lift();
+		intakeInst = new Intake();
+		rcGrabberInst = new RCGrabber();
+		lightsInst = new Lights();
 	}
 
 	/**
@@ -38,7 +44,8 @@ public class Robot extends SampleRobot
 	@Override
 	public void robotInit()
 	{
-
+		compInst.start();
+		lightsInst.set(true);
 	}
 
 	/**
@@ -56,7 +63,7 @@ public class Robot extends SampleRobot
 	@Override
 	public void autonomous()
 	{
-		
+
 	}
 
 	/**
@@ -65,7 +72,104 @@ public class Robot extends SampleRobot
 	@Override
 	public void operatorControl()
 	{
-		
+		boolean chopsticksOverridePrev = false;
+		boolean choopstickOverrideCurr = false;
+
+		while (isOperatorControl() && isEnabled())
+		{
+			// Drive Controls
+			double driveSpeedMultiplier = ((joyLeft
+					.getRawButton(Constants.SPEED_BOOST_BUTTON.getInt()) || joyRight
+					.getRawButton(Constants.SPEED_BOOST_BUTTON.getInt())) ? Constants.DRIVE_FAST_MUTLIPLIER
+					.getDouble() : Constants.DRIVE_SLOW_MULTIPLIER.getDouble());
+			double leftSpeed = joyLeft.getY();
+			double rightSpeed = joyRight.getY();
+			driveInst.setLeft(-leftSpeed * Math.abs(leftSpeed)
+					* driveSpeedMultiplier);
+			driveInst.setRight(-rightSpeed * Math.abs(rightSpeed)
+					* driveSpeedMultiplier);
+
+			// Intake Controls
+			intakeInst.setLeft(gamepad.getRawAxis(Constants.INTAKE_Y_AXIS
+					.getInt())
+					+ gamepad.getRawAxis(Constants.INTAKE_X_AXIS.getInt()));
+			intakeInst.setRight(gamepad.getRawAxis(Constants.INTAKE_Y_AXIS
+					.getInt())
+					- gamepad.getRawAxis(Constants.INTAKE_X_AXIS.getInt()));
+
+			intakeInst.open(gamepad.getRawButton(Constants.INTAKE_OPEN_BUTTON
+					.getInt()));
+
+			// Lift Controls
+			if (!gamepad.getRawButton(Constants.LIFT_OVERRIDE_UP_BUTTON
+					.getInt())
+					&& !gamepad
+							.getRawButton(Constants.LIFT_OVERRIDE_DOWN_BUTTON
+									.getInt()))
+			{
+				// Ends manual override if it was enabled
+				liftInst.endManualOverride();
+
+				// Normal Control
+				if (joyLeft.getRawButton(Constants.LIFT_RESET_BUTTON.getInt())
+						|| joyRight.getRawButton(Constants.LIFT_RESET_BUTTON
+								.getInt()))
+				{
+					liftInst.reset();
+				}
+				// sends lift up a level
+				else if (gamepad
+						.getRawButton(Constants.LIFT_UP_BUTTON.getInt()))
+				{
+					liftInst.levelChange(1);
+				}
+				// sends lift down a level
+				else if (gamepad.getRawButton(Constants.LIFT_DOWN_BUTTON
+						.getInt()))
+				{
+					liftInst.levelChange(-1);
+				}
+			} else
+			{
+				// Override Control
+
+				// Moves lift up while button is pressed
+				if (gamepad.getRawButton(Constants.LIFT_OVERRIDE_UP_BUTTON
+						.getInt()))
+				{
+					liftInst.manualOverride(Constants.LIFT_MOTOR_UP_OVERRIDE_SPEED
+							.getDouble());
+				}
+				// Moves lift down while button is pressed
+				else
+				{
+					liftInst.manualOverride(-Constants.LIFT_MOTOR_DOWN_OVERRIDE_SPEED
+							.getDouble());
+				}
+			}
+
+			// RC Grabber Override
+			if (joyLeft.getRawButton(Constants.RC_GRABBER_BUTTON.getInt()))
+			{
+				rcGrabberInst.deploy(true);
+			} else if (joyLeft.getRawButton(Constants.RC_GRABBER_BUTTON
+					.getInt()))
+			{
+				rcGrabberInst.deploy(false);
+			}
+
+			// Chopsticks Override
+			choopstickOverrideCurr = gamepad
+					.getRawButton(Constants.CHOPSTICKS_OVERRIDE_BUTTON.getInt());
+			if (chopsticksOverridePrev != choopstickOverrideCurr)
+			{
+				liftInst.chopsticksOverride(choopstickOverrideCurr);
+			}
+
+			chopsticksOverridePrev = choopstickOverrideCurr;
+
+			// TODO add current warning and smartdashboard stuff
+		}
 	}
 
 	/**
@@ -74,6 +178,6 @@ public class Robot extends SampleRobot
 	@Override
 	public void test()
 	{
-		
+
 	}
 }

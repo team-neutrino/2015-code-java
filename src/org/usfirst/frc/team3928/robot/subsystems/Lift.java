@@ -25,9 +25,9 @@ public class Lift implements Runnable
 	boolean resetCommand;
 	int levelChangeCommand;
 
-	public Lift(Chopsticks chopsticksInst)
+	public Lift()
 	{
-		this.chopsticksInst = chopsticksInst;
+		chopsticksInst = new Chopsticks();
 	}
 
 	public void levelChange(int levels)
@@ -109,34 +109,84 @@ public class Lift implements Runnable
 
 	private void levelChangeThreaded(int levels)
 	{
-		if (levels > 0)
-		{
-			for (int i = 0; i < levels; i++)
-			{
-				levelUpThreaded();
-			}
-		} else
-		{
-			for (int i = 0; i < -levels; i++)
-			{
-				levelDownThreaded();
-			}
-		}
-	}
+		boolean up = levels > 0;
 
-	private void levelUpThreaded()
-	{
-
-	}
-
-	private void levelDownThreaded()
-	{
-		if (limitSwitchBottom.get())
+		if (overrideEnabled || (limitSwitchTop.get() && up)
+				|| (limitSwitchBottom.get() && !up))
 		{
 			return;
 		}
-		
-		
+
+		liftMotor.set(Constants.LIFT_MOTOR_DOWN_SPEED.getDouble()
+				* (up ? 1 : -1));
+
+		for (int i = 0; i < -levels; i++)
+		{
+			moveLevelThreaded(up);
+		}
+
+		if (!overrideEnabled)
+		{
+			liftMotor.set(0);
+			isLifting = false;
+
+			if (!chopsticksOverrideEnabled)
+			{
+				chopsticksInst.open(false);
+			}
+		}
+	}
+
+	private void moveLevelThreaded(boolean up)
+	{
+		if (overrideEnabled || (limitSwitchTop.get() && up)
+				|| (limitSwitchBottom.get() && !up))
+		{
+			return;
+		}
+
+		// Runs the motor until we don't see the tape
+		long startTime = System.currentTimeMillis();
+		int beamBreakCount = 0;
+		while (beamBreakCount <= Constants.LIFT_NUM_SAMPLES.getInt()
+				&& (!limitSwitchBottom.get() || up)
+				&& (!limitSwitchTop.get() || !up)
+				&& (System.currentTimeMillis() - startTime) < Constants.LIFT_RESET_TIMEOUT
+						.getInt() && !overrideEnabled && !newCommand)
+		{
+			if (!beamBreak.get())
+			{
+				beamBreakCount++;
+			} else
+			{
+				beamBreakCount = 0;
+			}
+			Thread.yield();
+		}
+
+		// Runs the motor until we see the tape
+		beamBreakCount = 0;
+		while (beamBreakCount <= Constants.LIFT_NUM_SAMPLES.getInt()
+				&& (!limitSwitchBottom.get() || up)
+				&& (!limitSwitchTop.get() || !up)
+				&& (System.currentTimeMillis() - startTime) < Constants.LIFT_RESET_TIMEOUT
+						.getInt() && !overrideEnabled && !newCommand)
+		{
+			if (beamBreak.get())
+			{
+				beamBreakCount++;
+			} else
+			{
+				beamBreakCount = 0;
+			}
+			Thread.yield();
+		}
+
+		if ((System.currentTimeMillis() - startTime) < Constants.LIFT_RESET_TIMEOUT
+				.getInt())
+		{
+			Utils.sendDSError("Lift Timeout");
+		}
 	}
 
 	private void resetThreaded()
@@ -145,7 +195,7 @@ public class Lift implements Runnable
 		{
 			return;
 		}
-		
+
 		isLifting = true;
 		chopsticksInst.open(true);
 
@@ -164,14 +214,15 @@ public class Lift implements Runnable
 			liftMotor.set(0);
 			isLifting = false;
 		}
-		
+
 		if ((System.currentTimeMillis() - startTime) < Constants.LIFT_RESET_TIMEOUT
-						.getInt())
+				.getInt())
 		{
 			Utils.sendDSError("Lift Reset Timeout");
 		}
 	}
 
+	@Override
 	public void run()
 	{
 		while (true)
