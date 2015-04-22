@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class Utils
 {
-	private static final int COMP_TIME = 1428051600;
+	private static final int COMP_TIME = 1429986600;
 
 	public static void sendDSError(String message)
 	{
