@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class Constants
 {
+	private static final ArrayList<Constant> constList = new ArrayList<Constant>();
+	
 	// Autonomous Constants
 	public static final Constant AUTO_SWITCH_INPUT_0_CHANNEL = new Constant("AutoSwitchInput0Channel", 4);
 	public static final Constant AUTO_SWITCH_INPUT_1_CHANNEL = new Constant("AutoSwitchInput1Channel", 5);
@@ -95,8 +97,6 @@ public class Constants
 
 	// Misc Constants
 	public static final Constant PDP_ATTACHED = new Constant("PdpAttached", 1);
-
-	private static final ArrayList<Constant> constList = new ArrayList<Constant>();
 
 	private static final String FILE_PATH = "/home/lvuser/constants";
 
@@ -191,7 +191,7 @@ public class Constants
 		{
 			this.name = name;
 			this.value = value;
-			constList.add(this);
+//			constList.add(this);
 		}
 
 		public Constant(String name, boolean value)
