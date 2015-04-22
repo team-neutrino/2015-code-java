@@ -5,11 +5,10 @@ import org.usfirst.frc.team3928.robot.Utils;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lift implements Runnable
 {
-	// TODO add smartdashboard monitor
-
 	Victor liftMotor;
 	DigitalInput beamBreak;
 	DigitalInput limitSwitchBottom;
@@ -25,9 +24,34 @@ public class Lift implements Runnable
 	boolean resetCommand;
 	int levelChangeCommand;
 
+	Thread mainThread;
+	Thread monitorThread;
+
 	public Lift()
 	{
 		chopsticksInst = new Chopsticks();
+
+		mainThread = new Thread(this);
+		mainThread.start();
+
+		monitorThread = new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				while (true)
+				{
+					SmartDashboard.putBoolean("Beam Break", beamBreak.get());
+					SmartDashboard.putBoolean("Limit Switch Top",
+							limitSwitchTop.get());
+					SmartDashboard.putBoolean("Limit Switch Bottom",
+							limitSwitchBottom.get());
+					Thread.yield();
+				}
+			}
+		});
+
+		monitorThread.start();
 	}
 
 	public void levelChange(int levels)
