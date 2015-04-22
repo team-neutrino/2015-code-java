@@ -96,7 +96,8 @@ public class Constants
 	public static final Constant LIGHTS_CHANNEL = new Constant("LightsChannel", 0);
 
 	// Misc Constants
-	public static final Constant PDP_ATTACHED = new Constant("PdpAttached", 1);
+	public static final Constant PDP_ATTACHED = new Constant("PdpAttached", true);
+	public static final Constant SMART_DASHBOARD_TEST_BUTTON = new Constant("SmartDashboardTest", 11);
 
 	private static final String FILE_PATH = "/home/lvuser/constants";
 
@@ -191,7 +192,7 @@ public class Constants
 		{
 			this.name = name;
 			this.value = value;
-//			constList.add(this);
+			constList.add(this);
 		}
 
 		public Constant(String name, boolean value)

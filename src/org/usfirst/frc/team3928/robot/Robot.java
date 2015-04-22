@@ -8,6 +8,8 @@ import org.usfirst.frc.team3928.robot.subsystems.RCGrabber;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SampleRobot;
 
 public class Robot extends SampleRobot
@@ -21,6 +23,7 @@ public class Robot extends SampleRobot
 	private Intake intakeInst;
 	private RCGrabber rcGrabberInst;
 	private Lights lightsInst;
+	private CurrentMonitor currentMonitorInst;
 
 	/**
 	 * Constructor
@@ -36,6 +39,7 @@ public class Robot extends SampleRobot
 		intakeInst = new Intake();
 		rcGrabberInst = new RCGrabber();
 		lightsInst = new Lights();
+		currentMonitorInst = new CurrentMonitor();
 	}
 
 	/**
@@ -74,6 +78,9 @@ public class Robot extends SampleRobot
 	{
 		boolean chopsticksOverridePrev = false;
 		boolean choopstickOverrideCurr = false;
+		
+		boolean smartDashboardTestPrev = true;
+		boolean smartDashboardTestCurr = false;
 
 		while (isOperatorControl() && isEnabled())
 		{
@@ -168,7 +175,27 @@ public class Robot extends SampleRobot
 
 			chopsticksOverridePrev = choopstickOverrideCurr;
 
-			// TODO add current warning and smartdashboard stuff
+			// Current Warning && Test - rumbles when the breaker is about to blow
+			smartDashboardTestCurr = joyRight.getRawButton(11);
+			
+			if (currentMonitorInst.warning() || smartDashboardTestCurr)
+			{
+				gamepad.setRumble(RumbleType.kLeftRumble, 1);
+				gamepad.setRumble(RumbleType.kRightRumble, 1);
+			} else
+			{
+				gamepad.setRumble(RumbleType.kLeftRumble, 0);
+				gamepad.setRumble(RumbleType.kRightRumble, 0);
+			}
+
+			// SmartDashboard Test
+			if (smartDashboardTestCurr != smartDashboardTestPrev)
+			{
+				SmartDashboard.putBoolean("Test", smartDashboardTestCurr);
+			}
+			smartDashboardTestPrev = smartDashboardTestCurr;
+			
+			Thread.yield();
 		}
 	}
 
