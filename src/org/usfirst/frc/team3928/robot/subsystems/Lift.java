@@ -29,7 +29,17 @@ public class Lift implements Runnable
 
 	public Lift()
 	{
+		liftMotor = new Victor(Constants.LIFT_MOTOR_CHANNEL.getInt());
+		
+		beamBreak = new DigitalInput(Constants.BEAM_BREAK_CHANNEL.getInt());
+		limitSwitchBottom = new DigitalInput(Constants.LIMIT_SWITCH_BOTTOM_CHANNEL.getInt());
+		limitSwitchTop = new DigitalInput(Constants.LIMIT_SWITCH_TOP_CHANNEL.getInt());
+		
 		chopsticksInst = new Chopsticks();
+		
+		newCommand = false;
+		resetCommand = false;
+		levelChangeCommand = 0;
 
 		mainThread = new Thread(this);
 		mainThread.start();
