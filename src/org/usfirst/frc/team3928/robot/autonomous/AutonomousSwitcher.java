@@ -72,6 +72,8 @@ public class AutonomousSwitcher implements Runnable
 						}
 					}
 
+					modePrev = mode;
+
 					Thread.yield();
 				}
 			}

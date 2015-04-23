@@ -24,19 +24,23 @@ public class Lift implements Runnable
 	boolean resetCommand;
 	int levelChangeCommand;
 
+	private final int MONTITOR_REFRESH_RATE = 5000;
+
 	Thread mainThread;
 	Thread monitorThread;
 
 	public Lift()
 	{
 		liftMotor = new Victor(Constants.LIFT_MOTOR_CHANNEL.getInt());
-		
+
 		beamBreak = new DigitalInput(Constants.BEAM_BREAK_CHANNEL.getInt());
-		limitSwitchBottom = new DigitalInput(Constants.LIMIT_SWITCH_BOTTOM_CHANNEL.getInt());
-		limitSwitchTop = new DigitalInput(Constants.LIMIT_SWITCH_TOP_CHANNEL.getInt());
-		
+		limitSwitchBottom = new DigitalInput(
+				Constants.LIMIT_SWITCH_BOTTOM_CHANNEL.getInt());
+		limitSwitchTop = new DigitalInput(
+				Constants.LIMIT_SWITCH_TOP_CHANNEL.getInt());
+
 		chopsticksInst = new Chopsticks();
-		
+
 		newCommand = false;
 		resetCommand = false;
 		levelChangeCommand = 0;
@@ -49,13 +53,45 @@ public class Lift implements Runnable
 			@Override
 			public void run()
 			{
+				boolean beamBreakVal;
+				boolean beamBreakValPrev = false;
+
+				boolean limitSwitchTopVal;
+				boolean limitSwitchTopValPrev = false;
+
+				boolean limitSwitchBottomVal;
+				boolean limitSwitchBottomValPrev = false;
+
+				long lastRefresh = System.currentTimeMillis()
+						+ MONTITOR_REFRESH_RATE;
+
 				while (true)
 				{
-					SmartDashboard.putBoolean("Beam Break", beamBreak.get());
-					SmartDashboard.putBoolean("Limit Switch Top",
-							limitSwitchTop.get());
-					SmartDashboard.putBoolean("Limit Switch Bottom",
-							limitSwitchBottom.get());
+					beamBreakVal = beamBreak.get();
+					limitSwitchTopVal = limitSwitchTop.get();
+					limitSwitchBottomVal = limitSwitchBottom.get();
+					
+					long currTime = System.currentTimeMillis();
+
+					if (beamBreakVal != beamBreakValPrev
+							|| limitSwitchTopVal != limitSwitchTopValPrev
+							|| limitSwitchBottomVal != limitSwitchBottomValPrev
+							|| (currTime - lastRefresh) >= MONTITOR_REFRESH_RATE)
+					{
+						lastRefresh = currTime;
+						
+						SmartDashboard
+								.putBoolean("Beam Break", beamBreak.get());
+						SmartDashboard.putBoolean("Limit Switch Top",
+								limitSwitchTop.get());
+						SmartDashboard.putBoolean("Limit Switch Bottom",
+								limitSwitchBottom.get());
+					}
+
+					beamBreakValPrev = beamBreakVal;
+					limitSwitchTopValPrev = limitSwitchTopVal;
+					limitSwitchBottomValPrev = limitSwitchBottomVal;
+
 					Thread.yield();
 				}
 			}
