@@ -58,8 +58,18 @@ public class AutonomousSwitcher implements Runnable
 						lastRefresh = currTime;
 
 						SmartDashboard.putNumber("Autonomous Mode", mode);
-						SmartDashboard.putString("Autonomous Mode Description",
-								modes[mode].getName());
+
+						if (modes[mode] != null)
+						{
+							SmartDashboard.putString(
+									"Autonomous Mode Description",
+									modes[mode].getName());
+						} else
+						{
+							SmartDashboard.putString(
+									"Autonomous Mode Description", "Auto ["
+											+ mode + "] not implemented");
+						}
 					}
 
 					Thread.yield();
@@ -151,11 +161,11 @@ public class AutonomousSwitcher implements Runnable
 	private int getMode()
 	{
 		int ret;
-		
+
 		if (SmartDashboard.getBoolean("Auto Switch Override", false))
 		{
-			ret = (int) SmartDashboard.getNumber(
-					"Auto Switch Override Number", 0);
+			ret = (int) SmartDashboard.getNumber("Auto Switch Override Number",
+					0);
 		} else
 		{
 			ret = selectorSwitch.read();
