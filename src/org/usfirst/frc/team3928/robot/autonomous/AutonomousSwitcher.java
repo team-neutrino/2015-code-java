@@ -150,12 +150,17 @@ public class AutonomousSwitcher implements Runnable
 
 	private int getMode()
 	{
+		int ret;
+		
 		if (SmartDashboard.getBoolean("Auto Switch Override", false))
 		{
-			return (int) SmartDashboard.getNumber(
+			ret = (int) SmartDashboard.getNumber(
 					"Auto Switch Override Number", 0);
+		} else
+		{
+			ret = selectorSwitch.read();
 		}
 
-		return selectorSwitch.read();
+		return Math.max(0, Math.min(9, ret));
 	}
 }
