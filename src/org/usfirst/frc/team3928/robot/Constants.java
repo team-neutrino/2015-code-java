@@ -10,10 +10,10 @@ public class Constants
 	private static final ArrayList<Constant> constList = new ArrayList<Constant>();
 	
 	// Autonomous Constants
-	public static final Constant AUTO_SWITCH_INPUT_0_CHANNEL = new Constant("AutoSwitchInput0Channel", 4);
-	public static final Constant AUTO_SWITCH_INPUT_1_CHANNEL = new Constant("AutoSwitchInput1Channel", 5);
-	public static final Constant AUTO_SWITCH_INPUT_2_CHANNEL = new Constant("AutoSwitchInput2Channel", 6);
-	public static final Constant AUTO_SWITCH_INPUT_3_CHANNEL = new Constant("AutoSwitchInput3Channel", 7);
+	public static final Constant AUTO_SWITCH_INPUT_1_CHANNEL = new Constant("AutoSwitchInput0Channel", 4);
+	public static final Constant AUTO_SWITCH_INPUT_2_CHANNEL = new Constant("AutoSwitchInput1Channel", 5);
+	public static final Constant AUTO_SWITCH_INPUT_4_CHANNEL = new Constant("AutoSwitchInput2Channel", 6);
+	public static final Constant AUTO_SWITCH_INPUT_8_CHANNEL = new Constant("AutoSwitchInput3Channel", 7);
 	public static final Constant GYRO_ANALOG_CHANNEL = new Constant("GyroAnalogChannel", 1);
 	public static final Constant ENCODER_CHANNEL_A = new Constant("Encoder1ChannelA", 8);
 	public static final Constant ENCODER_CHANNEL_B = new Constant("Encoder1ChannelB", 9);

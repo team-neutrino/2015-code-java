@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3928.robot;
 
+import org.usfirst.frc.team3928.robot.autonomous.AutonomousSwitcher;
+import org.usfirst.frc.team3928.robot.autonomous.modes.DoNothing;
 import org.usfirst.frc.team3928.robot.subsystems.Drive;
 import org.usfirst.frc.team3928.robot.subsystems.Intake;
 import org.usfirst.frc.team3928.robot.subsystems.Lift;
@@ -13,14 +15,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot
 {
+	// Joysticks
 	private Joystick joyRight;
 	private Joystick joyLeft;
 	private Joystick gamepad;
+	
+	// Subsystems
 	private Drive driveInst;
 	private Lift liftInst;
 	private Intake intakeInst;
 	private RCGrabber rcGrabberInst;
 	private Lights lightsInst;
+	
+	// Misc
+	private AutonomousSwitcher autoSwitcherInst;
 	private CurrentMonitor currentMonitorInst;
 
 	/**
@@ -28,14 +36,20 @@ public class Robot extends SampleRobot
 	 */
 	public Robot()
 	{
+		// Joysticks
 		joyRight = new Joystick(Constants.JOY_RIGHT_PORT.getInt());
 		joyLeft = new Joystick(Constants.JOY_LEFT_PORT.getInt());
 		gamepad = new Joystick(Constants.GAMEPAD_PORT.getInt());
+		
+		// Subsystems
 		driveInst = new Drive();
 		liftInst = new Lift();
 		intakeInst = new Intake();
 		rcGrabberInst = new RCGrabber();
 		lightsInst = new Lights();
+		
+		// Misc
+		autoSwitcherInst = new AutonomousSwitcher();
 		currentMonitorInst = new CurrentMonitor();
 	}
 
@@ -46,6 +60,7 @@ public class Robot extends SampleRobot
 	public void robotInit()
 	{
 		lightsInst.set(true);
+		autoSwitcherInst.assignMode(new DoNothing(), 0);
 	}
 
 	/**
@@ -63,7 +78,7 @@ public class Robot extends SampleRobot
 	@Override
 	public void autonomous()
 	{
-
+		autoSwitcherInst.runAuto();
 	}
 
 	/**
