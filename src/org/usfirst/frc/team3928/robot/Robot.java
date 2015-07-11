@@ -170,7 +170,7 @@ public class Robot extends SampleRobot
 			if (joyLeft.getRawButton(Constants.RC_GRABBER_BUTTON.getInt()))
 			{
 				rcGrabberInst.deploy(true);
-			} else if (joyLeft.getRawButton(Constants.RC_GRABBER_BUTTON
+			} else if (joyRight.getRawButton(Constants.RC_GRABBER_BUTTON
 					.getInt()))
 			{
 				rcGrabberInst.deploy(false);
