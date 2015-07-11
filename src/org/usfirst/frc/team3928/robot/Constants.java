@@ -75,11 +75,11 @@ public class Constants
 	public static final Constant LIFT_NUM_SAMPLES = new Constant("LiftNumSamples", 5);
 	public static final Constant LIFT_RESET_TIMEOUT = new Constant("LiftResetTimeOut", 3000);
 
-	//Intake Constants
+	// Intake Constants
 	public static final Constant INTAKE_MOTOR_RIGHT_CHANNEL = new Constant("IntakeMotorRightChannel", 7);
-	public static final Constant INTAKE_MOTOR_RIGHT_POWER_CHANNEL = new Constant("IntakeMotorRightPowerChannel", 11);
+	public static final Constant INTAKE_MOTOR_RIGHT_POWER_CHANNEL = new Constant("IntakeMotorRightPowerChannel", 4);
 	public static final Constant INTAKE_MOTOR_LEFT_CHANNEL = new Constant("IntakeMotorLeftChannel", 3);
-	public static final Constant INTAKE_MOTOR_LEFT_POWER_CHANNEL = new Constant("IntakeMotorLeftPowerChannel", 7);
+	public static final Constant INTAKE_MOTOR_LEFT_POWER_CHANNEL = new Constant("IntakeMotorLeftPowerChannel", 11);
 
 	public static final Constant INTAKE_SOLENOID_OPEN_CHANNEL = new Constant("IntakeSolenoidOpenChannel", 1);
 	public static final Constant INTAKE_SOLENOID_CLOSE_CHANNEL = new Constant("IntakeSolenoidCloseChannel", 0);
@@ -94,6 +94,7 @@ public class Constants
 
 	// Lights Constants
 	public static final Constant LIGHTS_CHANNEL = new Constant("LightsChannel", 0);
+	public static final Constant LIGHTS_POWER_CHANNEL = new Constant("LightsChannel", 10);
 
 	// Misc Constants
 	public static final Constant PDP_ATTACHED = new Constant("PdpAttached", true);
