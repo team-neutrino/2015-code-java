@@ -127,7 +127,7 @@ public class AutonomousSwitcher implements Runnable
 		// wait a little bit
 		try
 		{
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e)
 		{
 		}
