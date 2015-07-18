@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot
 {
+	private final int NAME_REFRESH_RATE = 5000;
+	
 	// Joysticks
 	private Joystick joyRight;
 	private Joystick joyLeft;
@@ -92,6 +94,9 @@ public class Robot extends SampleRobot
 		
 		boolean smartDashboardTestPrev = true;
 		boolean smartDashboardTestCurr = false;
+		
+		long lastNameRefresh = System.currentTimeMillis()
+				+ NAME_REFRESH_RATE;
 
 		while (isOperatorControl() && isEnabled())
 		{
@@ -205,6 +210,15 @@ public class Robot extends SampleRobot
 				SmartDashboard.putBoolean("Test", smartDashboardTestCurr);
 			}
 			smartDashboardTestPrev = smartDashboardTestCurr;
+			
+			long currTime = System.currentTimeMillis();
+
+			if ((currTime - lastNameRefresh) >= NAME_REFRESH_RATE)
+			{
+				lastNameRefresh = currTime;
+				
+				Utils.updateSmartDashboardName();
+			}
 			
 			Thread.yield();
 		}
