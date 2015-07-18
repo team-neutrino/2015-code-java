@@ -25,6 +25,11 @@ public class Utils
 		try
 		{
 			Scanner in = new Scanner(new File(NAME_FILE_PATH));
+			if (!in.hasNext())
+			{
+				SmartDashboard.putString("Robot Name", "No Name");
+				return;
+			}
 			SmartDashboard.putString("Robot Name", in.nextLine());
 			in.close();
 		} catch (FileNotFoundException e)
