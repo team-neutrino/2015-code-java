@@ -70,7 +70,7 @@ public class Lift implements Runnable
 					beamBreakVal = beamBreak.get();
 					limitSwitchTopVal = limitSwitchTop.get();
 					limitSwitchBottomVal = limitSwitchBottom.get();
-					
+
 					long currTime = System.currentTimeMillis();
 
 					if (beamBreakVal != beamBreakValPrev
@@ -79,7 +79,7 @@ public class Lift implements Runnable
 							|| (currTime - lastRefresh) >= MONTITOR_REFRESH_RATE)
 					{
 						lastRefresh = currTime;
-						
+
 						SmartDashboard
 								.putBoolean("Beam Break", beamBreak.get());
 						SmartDashboard.putBoolean("Limit Switch Top",
@@ -187,10 +187,12 @@ public class Lift implements Runnable
 			return;
 		}
 
+		chopsticksInst.open(true);
+		
 		liftMotor.set(Constants.LIFT_MOTOR_DOWN_SPEED.getDouble()
 				* (up ? 1 : -1));
 
-		for (int i = 0; i < -levels; i++)
+		for (int i = 0; i < Math.abs(levels); i++)
 		{
 			moveLevelThreaded(up);
 		}
@@ -269,7 +271,7 @@ public class Lift implements Runnable
 		isLifting = true;
 		chopsticksInst.open(true);
 
-		liftMotor.set(Constants.LIFT_MOTOR_DOWN_SPEED.getDouble());
+		liftMotor.set(-Constants.LIFT_MOTOR_DOWN_SPEED.getDouble());
 
 		long startTime = System.currentTimeMillis();
 		while (!limitSwitchBottom.get()
