@@ -11,7 +11,7 @@ public class Utils
 {
 	private static final int COMP_TIME = 1429986600;
 
-	private static final String NAME_FILE_PATH = "/home/lvuser/constants";
+	private static final String NAME_FILE_PATH = "/home/lvuser/name";
 
 	public static void sendDSError(String message)
 	{
