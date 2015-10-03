@@ -100,14 +100,14 @@ public class Constants
 	public static final Constant PDP_ATTACHED = new Constant("PdpAttached", true);
 	public static final Constant SMART_DASHBOARD_TEST_BUTTON = new Constant("SmartDashboardTest", 11);
 
-	private static final String FILE_PATH = "/home/lvuser/constants";
+	private static final String CONSTANTS_FILE_PATH = "/home/lvuser/constants";
 
 	static
 	{
 		// read constant overrides
 		try
 		{
-			Scanner in = new Scanner(new File(FILE_PATH));
+			Scanner in = new Scanner(new File(CONSTANTS_FILE_PATH));
 			while (in.hasNext())
 			{
 				Scanner line = new Scanner(in.nextLine());
