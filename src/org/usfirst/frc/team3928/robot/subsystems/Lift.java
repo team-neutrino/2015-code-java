@@ -263,13 +263,14 @@ public class Lift implements Runnable
 
 	private void resetThreaded()
 	{
+		chopsticksInst.open(true);
+		
 		if (limitSwitchBottom.get())
 		{
 			return;
 		}
 
 		isLifting = true;
-		chopsticksInst.open(true);
 
 		liftMotor.set(-Constants.LIFT_MOTOR_DOWN_SPEED.getDouble());
 
