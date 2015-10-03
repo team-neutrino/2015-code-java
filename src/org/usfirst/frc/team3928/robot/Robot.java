@@ -2,7 +2,6 @@ package org.usfirst.frc.team3928.robot;
 
 import org.usfirst.frc.team3928.robot.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team3928.robot.autonomous.modes.DoNothing;
-import org.usfirst.frc.team3928.robot.subsystems.Camera;
 import org.usfirst.frc.team3928.robot.subsystems.Drive;
 import org.usfirst.frc.team3928.robot.subsystems.Intake;
 import org.usfirst.frc.team3928.robot.subsystems.Lift;
@@ -27,7 +26,6 @@ public class Robot extends SampleRobot
 	private Intake intakeInst;
 	private RCGrabber rcGrabberInst;
 	private Lights lightsInst;
-	private Camera cameraInst;
 	
 	// Misc
 	private AutonomousSwitcher autoSwitcherInst;
@@ -53,7 +51,6 @@ public class Robot extends SampleRobot
 		// Misc
 		autoSwitcherInst = new AutonomousSwitcher();
 		currentMonitorInst = new CurrentMonitor();
-		cameraInst = new Camera();
 	}
 
 	/**
@@ -63,7 +60,6 @@ public class Robot extends SampleRobot
 	public void robotInit()
 	{
 		lightsInst.set(true);
-		cameraInst.startCapture();
 		autoSwitcherInst.assignMode(new DoNothing(), 0);
 	}
 
