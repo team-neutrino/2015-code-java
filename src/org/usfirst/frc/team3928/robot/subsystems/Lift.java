@@ -254,7 +254,7 @@ public class Lift implements Runnable
 			Thread.yield();
 		}
 
-		if ((System.currentTimeMillis() - startTime) < Constants.LIFT_RESET_TIMEOUT
+		if ((System.currentTimeMillis() - startTime) > Constants.LIFT_RESET_TIMEOUT
 				.getInt())
 		{
 			Utils.sendDSError("Lift Timeout");
@@ -287,7 +287,7 @@ public class Lift implements Runnable
 			isLifting = false;
 		}
 
-		if ((System.currentTimeMillis() - startTime) < Constants.LIFT_RESET_TIMEOUT
+		if ((System.currentTimeMillis() - startTime) > Constants.LIFT_RESET_TIMEOUT
 				.getInt())
 		{
 			Utils.sendDSError("Lift Reset Timeout");
